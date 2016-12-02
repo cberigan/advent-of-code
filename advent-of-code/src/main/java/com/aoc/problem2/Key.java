@@ -2,37 +2,37 @@ package com.aoc.problem2;
 
 public class Key {
 
-	private Integer number;
-	private Integer up;
-	private Integer down;
-	private Integer left;
-	private Integer right;
+	private String name;
+	private String up;
+	private String down;
+	private String left;
+	private String right;
 	
-	public Key(Integer num, Integer up, Integer down, Integer left, Integer right){
-		this.number = num;
+	public Key(String name, String up, String down, String left, String right){
+		this.name = name;
 		this.up = up;
 		this.down = down;
 		this.left = left;
 		this.right = right;
 	}
 
-	public Integer getNumber() {
-		return number;
+	public String getNumber() {
+		return name;
 	}
 
-	public Integer getUp() {
+	public String getUp() {
 		return up;
 	}
 	
-	public Integer getDown() {
+	public String getDown() {
 		return down;
 	}
 	
-	public Integer getRight() {
+	public String getRight() {
 		return right;
 	}
 	
-	public Integer getLeft() {
+	public String getLeft() {
 		return left;
 	}
 	
@@ -40,7 +40,7 @@ public class Key {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((number == null) ? 0 : number.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 
@@ -53,10 +53,10 @@ public class Key {
 		if (getClass() != obj.getClass())
 			return false;
 		Key other = (Key) obj;
-		if (number == null) {
-			if (other.number != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!number.equals(other.number))
+		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}

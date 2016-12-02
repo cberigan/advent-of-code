@@ -12,6 +12,7 @@ public class Problem2 {
 		//part 1 
 		KeyPadEngine eng = GetKeypadEngine1();
 		SubmitMovesToKeyPadEngine(eng, moveSets);
+		//part 2
 		KeyPadEngine eng2 = GetKeypadEngine2();
 		SubmitMovesToKeyPadEngine(eng2, moveSets);
 	

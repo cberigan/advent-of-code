@@ -38,7 +38,7 @@ public class Problem2 {
 			}
 			eng.LogKeyNumber();
 		}
-		System.out.println("Code 1: " + eng.GetCode());
+		System.out.println("Code " + eng.GetName() + ": " + eng.GetCode());
 	}
 	
 	private static KeyPadEngine GetKeypadEngine1(){
@@ -63,7 +63,7 @@ public class Problem2 {
 		keys.put(seven.getNumber(), seven);
 		keys.put(eight.getNumber(), eight);
 		keys.put(nine.getNumber(), nine);
-		return new KeyPadEngine(keys,keys.get("5"));
+		return new KeyPadEngine("1", keys,keys.get("5"));
 	}
 	
 	private static KeyPadEngine GetKeypadEngine2(){
@@ -96,6 +96,6 @@ public class Problem2 {
 		keys.put(B.getNumber(), B);
 		keys.put(C.getNumber(), C);
 		keys.put(D.getNumber(), D);
-		return new KeyPadEngine(keys,keys.get("5"));
+		return new KeyPadEngine("2", keys,keys.get("5"));
 	}
 }

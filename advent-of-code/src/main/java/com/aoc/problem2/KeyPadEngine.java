@@ -8,15 +8,17 @@ public class KeyPadEngine {
 
 	private HashMap<String, Key> keys;
 	private Key position;
+	private String name;
 	
 	private List<String> code;
 	
-	public KeyPadEngine(HashMap<String, Key> keyEnv, Key start){
+	public KeyPadEngine(String name, HashMap<String, Key> keyEnv, Key start){
 		//set up keypad
-		keys = keyEnv;
-		code = new ArrayList<String>();
+		this.keys = keyEnv;
+		this.name = name;
+		this.code = new ArrayList<String>();
 		//set initial position
-		position = start;
+		this.position = start;
 	}
 	
 	public void SubmitMove(Move m){
@@ -34,6 +36,10 @@ public class KeyPadEngine {
 		if(newKey != null){
 			position = keys.get(newKey);
 		}
+	}
+	
+	public String GetName(){
+		return name;
 	}
 	
 	public void LogKeyNumber(){

@@ -2,8 +2,6 @@ package com.aoc.problem3;
 
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.aoc.helpers.Resources;
 import com.aoc.util.QuickSort;
@@ -12,28 +10,28 @@ public class Problem3 {
 
 	public static void main(String[] args) throws IOException {
 		
-		
 		String[] raw = Resources.LoadTextFile("prob3.txt").split("\n");
-		
-		
 		System.out.println("Possible triangles using method 1: " + Method1(raw));
 		System.out.println("Possible triangles using method 2: " + Method2(raw));
+		
 	}
 	
 	public static Integer Method1(String[] lines){
+		
 		Integer good = 0;
+		
 		for(String t : lines){
 			Integer[] nums = GetIntArray(t);
 			if(IsGood(nums)){
 				good++;
 			}
 		}
+		
 		return good;
 	}
 	
 	public static Integer Method2(String[] lines){
 		Integer good = 0;
-		
 		Integer[][] current = new Integer[3][3];
 		
 		for(int i = 0; i < lines.length;i++){
@@ -73,6 +71,7 @@ public class Problem3 {
 		ints[0] = s.nextInt();
 		ints[1] = s.nextInt();
 		ints[2] = s.nextInt();
+		s.close();
 		return ints;
 	}
 }

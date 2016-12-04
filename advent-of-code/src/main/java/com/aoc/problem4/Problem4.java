@@ -20,16 +20,40 @@ public class Problem4 {
 			
 			Integer id = Integer.parseInt(blocks[blocks.length-1]);
 			String cs = line.substring(line.indexOf('[')+1, line.indexOf(']'));
-			
+			String decrypted = cipher(data,id % 26);
 			CharCountPair[] cc = GetCharCounts(blocks);
 			CharCountPair[] top5 = GetTop5(cc);
 			
 			if(IsValid(top5,cs)){
 				sum+=id;
 			}
+			if(decrypted.startsWith("north")){
+				System.out.println(decrypted);
+			}
 		}
 		
 		System.out.println("sum of ids: " + sum);
+	}
+	
+	private static String cipher(String msg, int shift){
+	    String s = "";
+	    int len = msg.length();
+	    for(int x = 0; x < len; x++){
+	    	if(Character.isDigit(msg.charAt(x))){
+	    		s+= msg.charAt(x);
+	    		continue;
+	    	}
+	    	if(msg.charAt(x) == '-'){
+	    		s+= ' ';
+	    		continue;
+	    	}
+	        char c = (char)(msg.charAt(x) + shift);
+	        if (c > 'z')
+	            s += (char)(msg.charAt(x) - (26-shift));
+	        else
+	            s += (char)(msg.charAt(x) + shift);
+	    }
+	    return s;
 	}
 
 	private static boolean IsValid(CharCountPair[] top5, String cs) {

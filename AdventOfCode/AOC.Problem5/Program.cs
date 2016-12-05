@@ -10,43 +10,40 @@ namespace AOC.Problem5
 {
     class Program
     {
+        private static MD5 md5 = MD5.Create();
+
         static void Main(string[] args)
         {
-            char[] result = new char[8];
-            for (int k = 0; k < result.Length; k++)
-            {
-                result[k] = '-';
-            }
             string code = "ffykfhsq";
-            List<object> l = new List<object>();
-            string[] lines = File.ReadAllLines("data.txt");
-            int i = 0;
-            while (result.Contains('-'))
+            char[] result = "--------".ToCharArray();
+            
+            for (int i = 0; result.Contains('-'); i++)
             {
                 string newCode = code + i;
-                MD5 md5 = MD5.Create();
-
                 byte[] inputBytes = Encoding.ASCII.GetBytes(newCode);
-                byte[] hash = md5.ComputeHash(inputBytes);
+                byte[] temp = md5.ComputeHash(inputBytes);
+
                 StringBuilder sb = new StringBuilder();
-                for (int j = 0; j < hash.Length; j++)
+                
+                for (int j = 0; j < temp.Length; j++)
                 {
-                    sb.Append(hash[j].ToString("X2"));
+                    sb.Append(temp[j].ToString("X2"));
                 }
-                string hash2 = sb.ToString();
-                if (hash2.StartsWith("00000"))
+                
+                string hash = sb.ToString();
+                
+                if (hash.StartsWith("00000"))
                 {
                     int pos = -1;
-                    if (int.TryParse(hash2[5].ToString(), out pos)){
+                    if (int.TryParse(hash[5].ToString(), out pos)){
 
                         if (pos < 8 && result[pos].Equals('-'))
                         {
-                            char value = hash2[6];
+                            char value = hash[6];
                             result[pos] = value;
                         }
                     }
                 }
-                i++;
             }
             Console.WriteLine(new string(result));
             Console.ReadLine();

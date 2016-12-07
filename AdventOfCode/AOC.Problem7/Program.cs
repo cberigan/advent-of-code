@@ -14,25 +14,17 @@ namespace AOC.Problem7
             string[] raw = File.ReadAllLines("data.txt");
             int tsls = 0;
             int ssls = 0;
+
             foreach (var line in raw)
             {
                 IPData data = ExtractIPData(line);
-
-                if (IsTLS(data))
-                {
-                    tsls++;
-                }
-                if (IsSSL(data))
-                {
-                    ssls++;
-                }
+                if (IsTLS(data)) tsls++;
+                if (IsSSL(data)) ssls++;
             }
-
-
+            
             Console.WriteLine(tsls);
             Console.WriteLine(ssls);
             Console.ReadLine();
-
         }
 
         private static IPData ExtractIPData(string line)
@@ -41,20 +33,10 @@ namespace AOC.Problem7
             int index = 0;
             for (int i = 0; i < line.Length; i++)
             {
-                if (line[i] == '[')
-                {
-                    data.Supernet.Add(line.Substring(index, i - index));
-                    index = i + 1;
-                }
-                else if (line[i] == ']')
-                {
-                    data.Hypernet.Add(line.Substring(index, i - index));
-                    index = i + 1;
-                }
-                else if (i == line.Length - 1)
-                {
-                    data.Supernet.Add(line.Substring(index, i - index + 1));
-                }
+                if (line[i] == '[') data.Supernet.Add(line.Substring(index, i - index));
+                else if (line[i] == ']') data.Hypernet.Add(line.Substring(index, i - index));
+                else if (i == line.Length - 1) data.Supernet.Add(line.Substring(index, i - index + 1));
+                if (line[i] == '[' || line[i] == ']') index = i + 1;
             }
             return data;
         }
@@ -78,10 +60,7 @@ namespace AOC.Problem7
                 for (int i = 0; i < data.Length - 2; i++)
                 {
                     var aba = data.Substring(i, 3);
-                    if (data[i] == data[i + 2] && aba.Distinct().Count() != 1)
-                    {
-                        abas.Add(aba);
-                    }
+                    if (data[i] == data[i + 2] && aba.Distinct().Count() != 1) abas.Add(aba);
                 }
             }
             return abas;
@@ -93,10 +72,10 @@ namespace AOC.Problem7
             for (int i = 0; i < data.Length - 3; i++)
             {
                 var chars = data.Substring(i, 4);
-                if (data[i] == data[i + 3] && data[i + 1] == data[i + 2] && chars.Distinct().Count() != 1)
-                {
-                    results = true;
-                }
+
+                if (    data[i] == data[i + 3] && 
+                        data[i + 1] == data[i + 2] && 
+                        chars.Distinct().Count() != 1) results = true;
             }
             return results;
         }
@@ -112,10 +91,7 @@ namespace AOC.Problem7
                     var chars = data.Substring(i, 3);
                     if (data[i] == data[i + 2] && 
                         chars.Distinct().Count() != 1 && 
-                        babs.Contains(chars))
-                    {
-                        results = true;
-                    }
+                        babs.Contains(chars)) results = true;
                 }
             }
             return results;

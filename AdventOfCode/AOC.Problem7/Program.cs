@@ -43,8 +43,8 @@ namespace AOC.Problem7
 
         private static bool IsTLS(IPData data)
         {
-            return  data.Supernet.Select(d => TestFOrABBA(d)).Contains(true) && 
-                    !data.Hypernet.Select(d => TestFOrABBA(d)).Contains(true);
+            return  data.Supernet.Select(d => TestForABBA(d)).Contains(true) && 
+                    !data.Hypernet.Select(d => TestForABBA(d)).Contains(true);
         }
 
         private static bool IsSSL(IPData data)
@@ -66,7 +66,7 @@ namespace AOC.Problem7
             return abas;
         }
 
-        private static bool TestFOrABBA(string data)
+        private static bool TestForABBA(string data)
         {
             bool results = false;
             for (int i = 0; i < data.Length - 3; i++)

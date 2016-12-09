@@ -12,14 +12,15 @@ namespace AOC.Problem9
         static void Main(string[] args)
         {
             string raw = File.ReadAllText("data.txt");
-            long result = Process(raw, 0);
+            long method1 = Process(raw, 0, false);
+            long method2 = Process(raw, 0, true);
 
-            Console.WriteLine(result);
-            Console.WriteLine("XABCABCABCABCABCABCY"); 
+            Console.WriteLine(method1);
+            Console.WriteLine(method2);
             Console.ReadLine();
         }
 
-        private static long Process(string raw, long count)
+        private static long Process(string raw, long count, bool recurse)
         {
 
             for (int i = 0; i < raw.Length; i++)
@@ -31,7 +32,7 @@ namespace AOC.Problem9
                     var p = sub.Split('x');
                     var numChars = int.Parse(p[0]);
                     var repeat = int.Parse(p[1]);
-                    count += ProcessCompresion(raw.Substring(paran + 2, numChars), new Op(numChars, repeat));
+                    count += ProcessCompresion(raw.Substring(paran + 2, numChars), numChars, repeat, recurse);
                     i = paran + 1 + numChars;
                 }
                 else
@@ -42,10 +43,11 @@ namespace AOC.Problem9
             return count;
         }
 
-        private static long ProcessCompresion(string raw, Op op)
+        private static long ProcessCompresion(string raw, int chars, int repeat, bool recurse)
         {
-            string sub = raw.Substring(0, op.Chars);
-            return Process(sub , 0) * op.Repeat;
+            string sub = raw.Substring(0, chars);
+            long temp = recurse ? Process(sub, 0, recurse) : sub.Length;
+            return temp * repeat;
         }
     }
 }

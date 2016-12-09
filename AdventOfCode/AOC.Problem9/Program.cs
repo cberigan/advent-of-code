@@ -12,38 +12,40 @@ namespace AOC.Problem9
         static void Main(string[] args)
         {
             string raw = File.ReadAllText("data.txt");
-            string result = "";
+            long result = Process(raw, 0);
 
-            for (int i = 0; i < raw.Length; i++)
-            {
-                if (raw[i].Equals('(')) {
-                    string uncompressed = "";
-                    i = ProcessCompresion(raw,i, out uncompressed);
-                    result += uncompressed;
-                }
-                else
-                {
-                    result += raw[i];
-                }
-            }
-
-            Console.WriteLine(result.Length);
-            Console.WriteLine("ABBBBBC"); 
+            Console.WriteLine(result);
+            Console.WriteLine("XABCABCABCABCABCABCY"); 
             Console.ReadLine();
         }
 
-        private static int ProcessCompresion(string raw, int i, out string result)
+        private static long Process(string raw, long count)
         {
-            var paran = raw.IndexOf(')', i) - 1;
-            var sub = raw.Substring(i + 1, paran - i);
-            var p = sub.Split('x');
-            var numChars = int.Parse(p[0]);
-            var repeat = int.Parse(p[1]);
-            
 
-            var value = raw.Substring(paran + 2, numChars);
-            result = string.Concat(Enumerable.Repeat(value, repeat));
-            return paran + 1 + value.Length;
+            for (int i = 0; i < raw.Length; i++)
+            {
+                if (raw[i].Equals('('))
+                {
+                    var paran = raw.IndexOf(')', i) - 1;
+                    var sub = raw.Substring(i + 1, paran - i);
+                    var p = sub.Split('x');
+                    var numChars = int.Parse(p[0]);
+                    var repeat = int.Parse(p[1]);
+                    count += ProcessCompresion(raw.Substring(paran + 2, numChars), new Op(numChars, repeat));
+                    i = paran + 1 + numChars;
+                }
+                else
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        private static long ProcessCompresion(string raw, Op op)
+        {
+            string sub = raw.Substring(0, op.Chars);
+            return Process(sub , 0) * op.Repeat;
         }
     }
 }

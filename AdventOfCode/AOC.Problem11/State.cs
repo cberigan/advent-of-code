@@ -8,7 +8,8 @@ namespace AOC.Problem11
 {
     class State
     {
-        public HashSet<Item> Items { get; private set; }
+        public List<Pair> Pairs { get; private set; }
+        public List<Item> Items { get; private set; }
         public int ElevatorPos { get; private set; }
 
         public State PreviousState { get; private set; }
@@ -16,8 +17,43 @@ namespace AOC.Problem11
 
         public State(int elevator, List<Item> items)
         {
-            this.Items = new HashSet<Item>(items);
+            this.Items = items;
+            this.Pairs = GetPairs(items);
             this.ElevatorPos = elevator;
+        }
+
+        private List<Item> GetItems(List<Pair> pairs)
+        {
+            List<Item> items = new List<Item>();
+            foreach (var p in pairs)
+            {
+                items.Add(new Item(p.Type, MaterialType.generator, p.GenFloor));
+                items.Add(new Item(p.Type, MaterialType.microchip, p.MicFloor));
+            }
+            return items;
+        }
+
+        private List<Pair> GetPairs(List<Item> items)
+        {
+            List<Pair> pairs = new List<Pair>();
+            Dictionary<string, int> genFloors = new Dictionary<string, int>();
+            Dictionary<string, int> micFloors = new Dictionary<string, int>();
+            foreach (var i in items)
+            {
+                if (i.Type.Equals(MaterialType.generator))
+                {
+                    genFloors.Add(i.Material, i.Floor);
+                }
+                else
+                {
+                    micFloors.Add(i.Material, i.Floor);
+                }
+            }
+            foreach (var m in micFloors)
+            {
+                pairs.Add(new Pair(m.Key, m.Value, genFloors[m.Key]));
+            }
+            return pairs;
         }
 
         public State(int elevator, List<Item> items, State previous, Move move) : this(elevator,items)
@@ -26,7 +62,17 @@ namespace AOC.Problem11
             this.MoveFromPrevious = move;
         }
 
-        public List<State> GenerateNextStates()
+        internal int GetRank()
+        {
+            int sum = 0;
+            foreach (var i in Items)
+            {
+                sum += (4 - i.Floor);
+            }
+            return sum;
+        }
+
+        public HashSet<State> GenerateNextStates()
         {
             List<int> possibleFloors = GetPossibleElevatorFloors();
             var itemCombos = GetPossibleItemsOnElevator(Items.Where(i => i.Floor == ElevatorPos).ToList());
@@ -62,31 +108,26 @@ namespace AOC.Problem11
                 }
             }
             //if we can bring two items upstairs remove all moves we bring one item upstairs
-            var movesCopy = moves.Keys.ToList();
-            if(movesCopy.Count(m => m.ElevatorDirection.Equals(Direction.Up) && m.Items.Item1 != null && m.Items.Item2 != null) > 0)
-            {
-                var remove = movesCopy.Where(m => m.ElevatorDirection.Equals(Direction.Up) && m.Items.Item1 != null && m.Items.Item2 == null);
-                foreach (var r in remove)
-                {
-                    moves.Remove(r);
-                }
-            }
+            //var movesCopy = moves.Keys.ToList();
+            //if (movesCopy.Count(m => m.ElevatorDirection.Equals(Direction.Up) && m.Items.Item1 != null && m.Items.Item2 != null) > 0)
+            //{
+            //    var remove = movesCopy.Where(m => m.ElevatorDirection.Equals(Direction.Up) && m.Items.Item1 != null && m.Items.Item2 == null);
+            //    foreach (var r in remove)
+            //    {
+            //        moves.Remove(r);
+            //    }
+            //}
 
-            //if we can bring one item downstairs remove all moves we bring two items upstairs
-            if (movesCopy.Count(m => m.ElevatorDirection.Equals(Direction.Down) && m.Items.Item1 != null && m.Items.Item2 == null) > 0)
-            {
-                var remove = movesCopy.Where(m => m.ElevatorDirection.Equals(Direction.Down) && m.Items.Item1 != null && m.Items.Item2 != null);
-                foreach (var r in remove)
-                {
-                    moves.Remove(r);
-                }
-            }
-            return moves.Values.ToList();
-        }
-
-        private List<Move> GenerateAllPossibleMoves()
-        {
-            throw new NotImplementedException();
+            ////if we can bring one item downstairs remove all moves we bring two items downstairs
+            //if (movesCopy.Count(m => m.ElevatorDirection.Equals(Direction.Down) && m.Items.Item1 != null && m.Items.Item2 == null) > 0)
+            //{
+            //    var remove = movesCopy.Where(m => m.ElevatorDirection.Equals(Direction.Down) && m.Items.Item1 != null && m.Items.Item2 != null);
+            //    foreach (var r in remove)
+            //    {
+            //        moves.Remove(r);
+            //    }
+            //}
+            return new HashSet<State>(moves.Values.ToList());
         }
 
         internal int GetStepsFromStart()
@@ -190,10 +231,11 @@ namespace AOC.Problem11
             {
                 return false;
             }
-
-            return this.ElevatorPos.Equals(other.ElevatorPos) && this.Items.SetEquals(other.Items);
+            var thisPairs = new HashSet<Pair>(this.Pairs);
+            var thatPairs = new HashSet<Pair>(other.Pairs);
+            return this.ElevatorPos.Equals(other.ElevatorPos) && thisPairs.SetEquals(thatPairs);
         }
-
+        
         public override int GetHashCode()
         {
             return ElevatorPos.GetHashCode() ^ Items.GetHashCode();

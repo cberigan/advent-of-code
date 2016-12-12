@@ -11,11 +11,23 @@ namespace AOC.Problem11
     {
         static void Main(string[] args)
         {
-            string[] raw = File.ReadAllLines("data.txt");
+            string[] raw = File.ReadAllLines("data2.txt");
+
+            var items = ExtractItems(raw);
+
+            //initial State
+            State init = new State(1, items);
+            State finalState = FindSolutionPath(init);
+            Console.WriteLine(finalState.GetStepsFromStart());
+            Console.ReadLine();
+        }
+
+        private static List<Item> ExtractItems(string[] raw)
+        {
             List<Item> items = new List<Item>();
-            for (int i = 0; i < raw.Length;i++)
+            for (int i = 0; i < raw.Length; i++)
             {
-                var itemsRaw = raw[i].Replace(".",String.Empty).Split(new string[] { " a " }, StringSplitOptions.None).Skip(1);
+                var itemsRaw = raw[i].Replace(".", String.Empty).Split(new string[] { " a " }, StringSplitOptions.None).Skip(1);
                 foreach (var ir in itemsRaw)
                 {
                     var tokens = ir.Split(' ');
@@ -36,13 +48,7 @@ namespace AOC.Problem11
                     items.Add(item);
                 }
             }
-
-            //initial State
-            State init = new State(1, items);
-            State finalState = FindSolutionPath(init);
-            Console.WriteLine(finalState.GetStepsFromStart());
-            //PrintSolutionPath(finalState);
-            Console.ReadLine();
+            return items;
         }
 
         private static void PrintSolutionPath(State finalState)
@@ -74,12 +80,13 @@ namespace AOC.Problem11
 
         public static State FindSolutionPath(State initialState)
         {
+            int lowestRank = int.MaxValue;
             HashSet<State> explored = new HashSet<State>();
             Queue<State> toExplore = new Queue<State>();
             toExplore.Enqueue(initialState);
             while (true)
             {
-                if(toExplore.Peek() == null)
+                if(toExplore.Count == 0)
                 {
                     return null;
                 }
@@ -87,7 +94,13 @@ namespace AOC.Problem11
                 {
                     State currentState = toExplore.Dequeue();
                     explored.Add(currentState);
-                    List<State> nextStates = currentState.GenerateNextStates();
+                    var currentRank = currentState.GetRank();
+                    if(currentRank < lowestRank)
+                    {
+                        lowestRank = currentRank;
+                        Console.WriteLine("Best rank so far: {0}", lowestRank);
+                    }
+                    var nextStates = currentState.GenerateNextStates();
                     foreach (var s in nextStates)
                     {
                         if(!explored.Contains(s) && !toExplore.Contains(s))

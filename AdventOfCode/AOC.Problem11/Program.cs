@@ -13,12 +13,18 @@ namespace AOC.Problem11
         {
             string[] raw = File.ReadAllLines("data.txt");
 
-            var items = ExtractItems(raw);
+            var part1 = ExtractItems(raw);
+            var part2 = part1.ToList();
+            part2.Add(new Item("elerium", MaterialType.microchip, 1));
+            part2.Add(new Item("elerium", MaterialType.generator, 1));
+            part2.Add(new Item("dilithium", MaterialType.microchip, 1));
+            part2.Add(new Item("dilithium", MaterialType.generator, 1));
 
             //initial State
-            State init = new State(1, items);
-            State finalState = FindSolutionPath(init);
-            Console.WriteLine(finalState.GetStepsFromStart());
+            Console.WriteLine("Running Part 1....");
+            Console.WriteLine("Part1 steps: " + FindSolutionPath(new State(1, part1)).GetStepsFromStart());
+            Console.WriteLine("Running Part 2....");
+            Console.WriteLine("Part2 steps: " + FindSolutionPath(new State(1, part2)).GetStepsFromStart());
             Console.ReadLine();
         }
 
@@ -42,7 +48,6 @@ namespace AOC.Problem11
                     {
                         convertedMaterial = tokens[0];
                     }
-                    Console.WriteLine(convertedMaterial + " " + tokens[1]);
 
                     var item = new Item(convertedMaterial, type, i + 1);
                     items.Add(item);

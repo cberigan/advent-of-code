@@ -13,8 +13,8 @@ namespace AOC.Problem11
         {
             int rank1 = x.GetRank();
             int rank2 = y.GetRank();
-            if (rank1 < rank2) return -1;
-            else if (rank2 > rank1) return 1;
+            if (rank1 > rank2) return -1;
+            else if (rank2 < rank1) return 1;
             else return 0;
         }
     }

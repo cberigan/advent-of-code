@@ -11,7 +11,7 @@ namespace AOC.Problem11
     {
         static void Main(string[] args)
         {
-            string[] raw = File.ReadAllLines("data2.txt");
+            string[] raw = File.ReadAllLines("data.txt");
 
             var items = ExtractItems(raw);
 

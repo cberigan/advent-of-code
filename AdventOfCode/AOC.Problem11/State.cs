@@ -53,6 +53,7 @@ namespace AOC.Problem11
             {
                 pairs.Add(new Pair(m.Key, m.Value, genFloors[m.Key]));
             }
+            pairs.Sort(new PairComparer());
             return pairs;
         }
 
@@ -108,25 +109,25 @@ namespace AOC.Problem11
                 }
             }
             //if we can bring two items upstairs remove all moves we bring one item upstairs
-            //var movesCopy = moves.Keys.ToList();
-            //if (movesCopy.Count(m => m.ElevatorDirection.Equals(Direction.Up) && m.Items.Item1 != null && m.Items.Item2 != null) > 0)
-            //{
-            //    var remove = movesCopy.Where(m => m.ElevatorDirection.Equals(Direction.Up) && m.Items.Item1 != null && m.Items.Item2 == null);
-            //    foreach (var r in remove)
-            //    {
-            //        moves.Remove(r);
-            //    }
-            //}
+            var movesCopy = moves.Keys.ToList();
+            if (movesCopy.Count(m => m.ElevatorDirection.Equals(Direction.Up) && m.Items.Item1 != null && m.Items.Item2 != null) > 0)
+            {
+                var remove = movesCopy.Where(m => m.ElevatorDirection.Equals(Direction.Up) && m.Items.Item1 != null && m.Items.Item2 == null);
+                foreach (var r in remove)
+                {
+                    moves.Remove(r);
+                }
+            }
 
-            ////if we can bring one item downstairs remove all moves we bring two items downstairs
-            //if (movesCopy.Count(m => m.ElevatorDirection.Equals(Direction.Down) && m.Items.Item1 != null && m.Items.Item2 == null) > 0)
-            //{
-            //    var remove = movesCopy.Where(m => m.ElevatorDirection.Equals(Direction.Down) && m.Items.Item1 != null && m.Items.Item2 != null);
-            //    foreach (var r in remove)
-            //    {
-            //        moves.Remove(r);
-            //    }
-            //}
+            //if we can bring one item downstairs remove all moves we bring two items downstairs
+            if (movesCopy.Count(m => m.ElevatorDirection.Equals(Direction.Down) && m.Items.Item1 != null && m.Items.Item2 == null) > 0)
+            {
+                var remove = movesCopy.Where(m => m.ElevatorDirection.Equals(Direction.Down) && m.Items.Item1 != null && m.Items.Item2 != null);
+                foreach (var r in remove)
+                {
+                    moves.Remove(r);
+                }
+            }
             return new HashSet<State>(moves.Values.ToList());
         }
 
@@ -231,9 +232,8 @@ namespace AOC.Problem11
             {
                 return false;
             }
-            var thisPairs = new HashSet<Pair>(this.Pairs);
-            var thatPairs = new HashSet<Pair>(other.Pairs);
-            return this.ElevatorPos.Equals(other.ElevatorPos) && thisPairs.SetEquals(thatPairs);
+
+            return this.ElevatorPos.Equals(other.ElevatorPos) && this.Pairs.SequenceEqual(other.Pairs);
         }
         
         public override int GetHashCode()

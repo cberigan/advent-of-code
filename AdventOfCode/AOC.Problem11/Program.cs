@@ -39,17 +39,11 @@ namespace AOC.Problem11
                     var tokens = ir.Split(' ');
                     var type = tokens[1].Contains("generator") ? MaterialType.generator : MaterialType.microchip;
 
-                    var convertedMaterial = "";
-                    if (type.Equals(MaterialType.microchip))
-                    {
-                        convertedMaterial = tokens[0].Split('-')[0];
-                    }
-                    else
-                    {
-                        convertedMaterial = tokens[0];
-                    }
+                    var material = "";
+                    if (type.Equals(MaterialType.microchip)) material = tokens[0].Split('-')[0];
+                    else material = tokens[0];
 
-                    var item = new Item(convertedMaterial, type, i + 1);
+                    var item = new Item(material, type, i + 1);
                     items.Add(item);
                 }
             }
@@ -88,13 +82,12 @@ namespace AOC.Problem11
             int lowestRank = int.MaxValue;
             HashSet<State> explored = new HashSet<State>();
             Queue<State> toExplore = new Queue<State>();
+
             toExplore.Enqueue(initialState);
+
             while (true)
             {
-                if(toExplore.Count == 0)
-                {
-                    return null;
-                }
+                if(toExplore.Count == 0) return null;
                 else
                 {
                     State currentState = toExplore.Dequeue();
@@ -110,26 +103,12 @@ namespace AOC.Problem11
                     {
                         if(!explored.Contains(s) && !toExplore.Contains(s))
                         {
-                            if (s.IsGoal())
-                            {
-                                return s;
-                            }
-                            else
-                            {
-                                toExplore.Enqueue(s);
-                            }
-                        }
-                        else
-                        {
-                            ;
+                            if (s.IsGoal()) return s;
+                            else toExplore.Enqueue(s);
                         }
                     }
                 }
             }
-
         }
-
-
-        
     }
 }

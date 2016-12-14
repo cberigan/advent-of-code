@@ -147,10 +147,7 @@ namespace AOC.Problem11
             bool valid = true;
             for (int floor = 1; floor <= 4; floor++)
             {
-                if (!IsFloorValid(ElevatorPos, floor))
-                { 
-                    valid = false;
-                }
+                if (!IsFloorValid(ElevatorPos, floor)) valid = false;
             }
 
             return valid;
@@ -178,14 +175,8 @@ namespace AOC.Problem11
             }
             
             //check for exposed chips
-            if(chips.Count > 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            if(chips.Count > 0) return false;
+            else return true;
         }
 
         public bool IsGoal()
@@ -214,24 +205,17 @@ namespace AOC.Problem11
             var down = ElevatorPos - 1;
 
             //if no items are on the floors below don't go down
-            if(down >= 1)
-            {
-                if(Items.Count(i => i.Floor <= down) > 0)
-                    floors.Add(down);
-            }
+            if(down >= 1 && Items.Count(i => i.Floor <= down) > 0)
+                floors.Add(down);
 
-            if(up <= 4) floors.Add(up);
+            if (up <= 4) floors.Add(up);
             return floors;
         }
 
         public override bool Equals(object obj)
         {
             var other = obj as State;
-
-            if (other == null)
-            {
-                return false;
-            }
+            if (other == null) return false;
 
             return this.ElevatorPos.Equals(other.ElevatorPos) && this.Pairs.SequenceEqual(other.Pairs);
         }

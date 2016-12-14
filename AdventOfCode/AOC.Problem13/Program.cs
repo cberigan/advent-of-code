@@ -21,7 +21,6 @@ namespace AOC.Problem13
             Console.WriteLine("Finding all spaces withing 50 steps...");
             int reachable = 0;
             Space start = new Space(1, 1);
-            Space goal = new Space(31, 39);
             HashSet<Space> closed = new HashSet<Space>();
             Queue<Space> open = new Queue<Space>();
             open.Enqueue(start);
@@ -30,11 +29,6 @@ namespace AOC.Problem13
             {
                 
                 var current = open.Dequeue();
-                if (current.Equals(goal))
-                {
-                    goal = current;
-                    break;
-                }
                 reachable++;
                 closed.Add(current);
                 List<Space> points = current.GetPointsAround();
@@ -42,7 +36,6 @@ namespace AOC.Problem13
                 {
                     if (closed.Contains(p)) continue;
                     else if (p.IsWall) closed.Add(p);
-
                     else if (p.GetStepsFromStart() <= 50)
                     {
                         closed.Add(p);

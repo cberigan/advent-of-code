@@ -11,13 +11,9 @@ namespace AOC.Problem13
         public int X { get; private set; }
         public int Y { get; private set; }
         public bool IsWall { get; private set; }
-        public bool IsOpen {
-            get { return !IsWall; }
-        }
+        public bool IsOpen { get { return !IsWall; } }
 
         public Space ParentSpace { get; private set; }
-
-        private int favorite = 1350;
 
         public Space(int x, int y)
         {
@@ -33,7 +29,7 @@ namespace AOC.Problem13
 
         private bool DetermineWall()
         {
-            var value = (X * X) + (3 * X) + (2 * X * Y) + Y + (Y * Y) + favorite;
+            var value = (X * X) + (3 * X) + (2 * X * Y) + Y + (Y * Y) + 1350;
             var binary = Convert.ToString(value, 2);
             return binary.Count(c => c.Equals('1')) % 2 == 1 || X < 0 || Y < 0;
         }
@@ -69,7 +65,6 @@ namespace AOC.Problem13
         {
             var other = obj as Space;
             if (other == null) return false;
-
             return X.Equals(other.X) && Y.Equals(other.Y);
         }
 

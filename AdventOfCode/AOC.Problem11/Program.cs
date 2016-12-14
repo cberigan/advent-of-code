@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,10 +22,18 @@ namespace AOC.Problem11
             part2.Add(new Item("dilithium", MaterialType.generator, 1));
 
             //initial State
+            var clock = new Stopwatch();
             Console.WriteLine("Running Part 1....");
-            Console.WriteLine("Part1 steps: " + FindSolutionPath(new State(1, part1)).GetStepsFromStart());
+            clock.Start();
+            var steps = FindSolutionPath(new State(1, part1)).GetStepsFromStart();
+            clock.Stop();
+            Console.WriteLine("Part1 steps: " + steps + " time: " + clock.Elapsed.TotalSeconds);
             Console.WriteLine("Running Part 2....");
-            Console.WriteLine("Part2 steps: " + FindSolutionPath(new State(1, part2)).GetStepsFromStart());
+            clock.Reset();
+            clock.Start();
+            var steps2 = FindSolutionPath(new State(1, part2)).GetStepsFromStart();
+            clock.Stop();
+            Console.WriteLine("Part2 steps: " + steps2 + " time: " + clock.Elapsed.TotalSeconds );
             Console.ReadLine();
         }
 

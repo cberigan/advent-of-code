@@ -19,21 +19,17 @@ namespace AOC.Problem17
 
             toExplore.Enqueue(new Room(0, 0, "veumntbg"));
 
-            while (true)
+            while (toExplore.Count > 0)
             {
-                if (toExplore.Count == 0) break;
-                else
+                Room currentState = toExplore.Dequeue();
+                explored.Add(currentState);
+                var nextStates = currentState.GenerateNextStates();
+                foreach (var s in nextStates)
                 {
-                    Room currentState = toExplore.Dequeue();
-                    explored.Add(currentState);
-                    var nextStates = currentState.GenerateNextStates();
-                    foreach (var s in nextStates)
+                    if (!explored.Contains(s) && !toExplore.Contains(s))
                     {
-                        if (!explored.Contains(s) && !toExplore.Contains(s))
-                        {
-                            if (s.IsGoal()) rooms.Add(s);
-                            else toExplore.Enqueue(s);
-                        }
+                        if (s.IsGoal()) rooms.Add(s);
+                        else toExplore.Enqueue(s);
                     }
                 }
             }

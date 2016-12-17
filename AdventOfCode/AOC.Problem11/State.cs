@@ -224,5 +224,18 @@ namespace AOC.Problem11
         {
             return ElevatorPos.GetHashCode() ^ Items.GetHashCode();
         }
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("===================");
+            sb.AppendLine(string.Format("Elevator Position: {0}", ElevatorPos));
+            for (int i = 4; i >= 1; i--)
+            {
+                var itemsOnFloor = Items.Where(it => it.Floor == i);
+                sb.AppendLine(string.Format("Floor {0}: {1}", i, string.Join(", ", itemsOnFloor.Select(s => s.ToString()).ToArray())));
+            }
+            sb.AppendLine("===================");
+            return sb.ToString();
+        }
     }
 }

@@ -59,33 +59,6 @@ namespace AOC.Problem11
             return items;
         }
 
-        private static void PrintSolutionPath(State finalState)
-        {
-            State currentState = finalState;
-            while (currentState.PreviousState != null)
-            {
-                PrintState(currentState);
-                var move = currentState.MoveFromPrevious;
-                Console.WriteLine("Elevator Moves: {0}", move.ElevatorDirection.ToString());
-                var i2 = move.Items.Item2 == null ? "" : move.Items.Item2.ToString();
-                Console.WriteLine("Takes Items: {0} {1}", move.Items.Item1.ToString(), i2);
-                currentState = currentState.PreviousState;
-            }
-            PrintState(currentState);
-        }
-
-        private static void PrintState(State state)
-        {
-            Console.WriteLine("===================");
-            Console.WriteLine("Elevator Position: {0}", state.ElevatorPos);
-            for (int i = 4; i >= 1; i--)
-            {
-                var itemsOnFloor = state.Items.Where(it => it.Floor == i);
-                Console.WriteLine("Floor {0}: {1}", i, string.Join(", ", itemsOnFloor.Select(s => s.ToString()).ToArray()));
-            }
-            Console.WriteLine("===================");
-        }
-
         public static State FindSolutionPath(State initialState)
         {
             int lowestRank = int.MaxValue;
@@ -94,30 +67,27 @@ namespace AOC.Problem11
 
             toExplore.Enqueue(initialState);
 
-            while (true)
+            while(toExplore.Count > 0)
             {
-                if(toExplore.Count == 0) return null;
-                else
+                State currentState = toExplore.Dequeue();
+                explored.Add(currentState);
+                var currentRank = currentState.GetRank();
+                if (currentRank < lowestRank)
                 {
-                    State currentState = toExplore.Dequeue();
-                    explored.Add(currentState);
-                    var currentRank = currentState.GetRank();
-                    if(currentRank < lowestRank)
+                    lowestRank = currentRank;
+                    Console.WriteLine("Best rank so far: {0}", lowestRank);
+                }
+                var nextStates = currentState.GenerateNextStates();
+                foreach (var s in nextStates)
+                {
+                    if (!explored.Contains(s) && !toExplore.Contains(s))
                     {
-                        lowestRank = currentRank;
-                        Console.WriteLine("Best rank so far: {0}", lowestRank);
-                    }
-                    var nextStates = currentState.GenerateNextStates();
-                    foreach (var s in nextStates)
-                    {
-                        if(!explored.Contains(s) && !toExplore.Contains(s))
-                        {
-                            if (s.IsGoal()) return s;
-                            else toExplore.Enqueue(s);
-                        }
+                        if (s.IsGoal()) return s;
+                        else toExplore.Enqueue(s);
                     }
                 }
             }
+            return null;
         }
     }
 }

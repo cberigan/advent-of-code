@@ -23,7 +23,7 @@ namespace AOC.Problem19
                 var before = current;
                 current = current.Left;
                 current.Right = before;
-                if(i == numElfs - 1)
+                if (i == numElfs - 1)
                 {
                     current.Left = first;
                     first.Right = current;
@@ -48,8 +48,6 @@ namespace AOC.Problem19
     public class Elf
     {
         public static Elf elfTracking = null;
-        public static bool traverseMode = false;
-        public static int track = 0;
         private static int elfs = 3005290;
         public int Num { get; private set; }
         public int Presents { get; set; }
@@ -76,51 +74,27 @@ namespace AOC.Problem19
 
         public void TakePresentsAcross()
         {
-            if(elfs== 5)
+            if (elfTracking == null)
             {
-                ;
-            }
-            //traverse list around left
-            Elf current = null;
-            int count = 0;
-            if (elfTracking == null || traverseMode)
-            {
-                
-                current = this;
-                
-                
-            }
-            else
-            {
-                
-                //next time elf moves to left and one has been removed so count from current should be track - 2;
-                count = track - 2;
-                if (count < 100)
+                int count = 0;
+                Elf current = this;
+                while ((decimal)count * GetDegree() <= 180.0m)
                 {
-                    traverseMode = true;
+                    var d2 = count * GetDegree();
+                    count++;
+                    current = current.Left;
                 }
-                //traverse from track
-                current = elfTracking;
+                elfTracking = current.Right;
             }
-            decimal d = GetDegree();
-            while ((decimal)count * GetDegree() <= 180.0m)
-            {
-                var d2 = count * GetDegree();
-                count++;
-                current = current.Left;
-            }
-            track = count;
-            elfTracking = current;
-            current = current.Right;//switch back to the left of 180
-            this.Presents += current.Presents;
+            this.Presents += elfTracking.Presents;
             //link both left and right of current
-            current.Right.Left = current.Left;
-            current.Left.Right = current.Right;
+            elfTracking.Right.Left = elfTracking.Left;
+            elfTracking.Left.Right = elfTracking.Right;
+
+            elfTracking = elfs % 2 == 1 ? elfTracking.Left.Left : elfTracking.Left;
+            
+           
             elfs--;
-            if (elfs == 2)
-            {
-                ;
-            }
         }
 
         public override bool Equals(object obj)

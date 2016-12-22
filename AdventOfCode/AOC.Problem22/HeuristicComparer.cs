@@ -21,13 +21,16 @@ namespace AOC.Problem22
         {
             int hx = x.DataLocation.GetDistance(goal);
             int hy = y.DataLocation.GetDistance(goal);
+
+            //get 
             int hx2 = x.EmptyNode.GetDistance(x.DataLocation);
             int hy2 = y.EmptyNode.GetDistance(y.DataLocation);
-            //int hx3 = x.EmptyNode.GetDistance(goal);
-            //int hy3 = y.EmptyNode.GetDistance(goal);
 
-            var x_total = hx + hx2;
-            var y_total = hy + hy2;
+            int hx3 = x.EmptyNode.GetDistance(goal);
+            int hy3 = y.EmptyNode.GetDistance(goal);
+
+            var x_total = hx + hx2 + hx3;
+            var y_total = hy + hy2 + hy3;
             if (x_total > y_total) return -1;
             else if (y_total > x_total) return 1;
             else return 0;

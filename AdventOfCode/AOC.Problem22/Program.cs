@@ -22,11 +22,11 @@ namespace AOC.Problem22
             Console.WriteLine("Part 1: " + pairs);
 
             Console.WriteLine(initialState.ToString());
-            BFS(initialState);
+            AStar(initialState);
             Console.ReadLine();
         }
 
-        static void AStar(State initial)
+        static State AStar(State initial)
         {
             Console.WriteLine("Finding best path using A*...");
             HashSet<State> closed = new HashSet<State>();
@@ -51,33 +51,7 @@ namespace AOC.Problem22
             }
 
             Console.WriteLine("Steps to goal: {0}", goal.GetStepsFromStart());
-            goal.PrintPath();
-        }
-
-        static void BFS(State initial)
-        {
-            Console.WriteLine("Finding shortest path");
-            int reachable = 0;
-            HashSet<State> closed = new HashSet<State>();
-            Queue<State> open = new Queue<State>();
-            open.Enqueue(initial);
-            State goal = null;
-            while (goal == null)
-            {
-
-                var current = open.Dequeue();
-                reachable++;
-                closed.Add(current);
-                List<State> points = current.GetSuccessors();
-                foreach (var p in points)
-                {
-                    if (closed.Contains(p)) continue;
-                    else if (p.IsGoal()) goal = p;
-                    else { open.Enqueue(p); }
-                }
-            }
-
-            Console.WriteLine("Steps to goal: {0}", goal.GetStepsFromStart());
+            return goal;
         }
     }
 }

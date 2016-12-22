@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AOC.Problem22
 {
@@ -28,6 +29,21 @@ namespace AOC.Problem22
         internal Point ToCopy()
         {
             return new Point(X, Y);
+        }
+
+        internal int GetDistance(Point other)
+        {
+            return Math.Abs(this.Y - other.Y) + Math.Abs(this.X - other.X);
+        }
+
+        internal List<Point> GetPointsAround()
+        {
+            List<Point> points = new List<Point>();
+            points.Add(new Point(X + 1, Y));
+            points.Add(new Point(X - 1, Y));
+            points.Add(new Point(X, Y - 1));
+            points.Add(new Point(X, Y + 1));
+            return points;
         }
     }
 }

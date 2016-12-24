@@ -52,6 +52,7 @@ namespace AOC.Problem24
             var paths = places.Permute().Where(p=> p.ElementAt(0).Name.Equals('0')).ToList();
             int part1Shortest = int.MaxValue;
             int part2Shortest = int.MaxValue;
+
             foreach (var p in paths)
             {
                 var path = p.ToList();
@@ -62,7 +63,9 @@ namespace AOC.Problem24
                 {
                     part1 += path[i].Connections[path[i + 1]];
                 }
+
                 path.Add(path[0]); // add route back for part 2
+
                 for (int i = 0; i < path.Count - 1; i++)
                 {
                     part2 += path[i].Connections[path[i + 1]];
@@ -109,41 +112,6 @@ namespace AOC.Problem24
         static bool IsWall(Point p)
         {
             return grid[p.X, p.Y] == '#';
-        }
-
-        private static int Factorial(int places)
-        {
-            if (places == 1) return 1;
-            return places * Factorial(places - 1);
-        }
-
-        static char[,] InitGrid(string[] data)
-        {
-            char[,] grid = new char[data.Length, data[0].Length];
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                for (int j = 0; j < data[i].Length; j++)
-                {
-                    grid[i, j] = data[i][j];
-                }
-            }
-
-            return grid;
-        }
-
-        private static void PrintGrid(char[,] screen)
-        {
-            int rowLength = screen.GetLength(0);
-            int colLength = screen.GetLength(1);
-            for (int i = 0; i < rowLength; i++)
-            {
-                for (int j = 0; j < colLength; j++)
-                {
-                    Console.Write(string.Format("{0} ", screen[i, j]));
-                }
-                Console.Write(Environment.NewLine + Environment.NewLine);
-            }
         }
     }
 }
